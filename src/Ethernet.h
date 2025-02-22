@@ -105,16 +105,17 @@ public:
 	void setRetransmissionTimeout(uint16_t milliseconds);
 	void setRetransmissionCount(uint8_t num);
 
+	// Opens a socket(TCP or UDP or IP_RAW mode)
+	static uint8_t socketBegin(uint8_t protocol, uint16_t port);
+	// Close socket
+	static void socketClose(uint8_t s);
+
 	friend class EthernetClient;
 	friend class EthernetServer;
 	friend class EthernetUDP;
 private:
-	// Opens a socket(TCP or UDP or IP_RAW mode)
-	static uint8_t socketBegin(uint8_t protocol, uint16_t port);
 	static uint8_t socketBeginMulticast(uint8_t protocol, IPAddress ip,uint16_t port);
 	static uint8_t socketStatus(uint8_t s);
-	// Close socket
-	static void socketClose(uint8_t s);
 	// Establish TCP connection (Active connection)
 	static void socketConnect(uint8_t s, uint8_t * addr, uint16_t port);
 	// disconnect the connection
