@@ -140,7 +140,10 @@ void EthernetClient::stop()
 	// wait up to a second for the connection to close
 	do {
 		if (Ethernet.socketStatus(_sockindex) == SnSR::CLOSED) {
-			_sockindex = MAX_SOCK_NUM;
+			#ifdef DEBUG_ETHERNET
+  				Serial.printf("stop(): Closed socket %d\n", _sockindex);
+  			#endif
+			  _sockindex = MAX_SOCK_NUM;
 			return; // exit the loop
 		}
 		delay(1);
