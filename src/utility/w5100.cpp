@@ -253,7 +253,7 @@ uint8_t W5100Class::isW5200(void)
 uint8_t W5100Class::isW5500(void)
 {
 	chip = 55;
-	//Serial.println("w5100.cpp: detect W5500 chip");
+	// Serial.println("w5100.cpp: detect W5500 chip");
 	if (!softReset()) return 0;
 	writeMR(0x08);
 	if (readMR() != 0x08) return 0;
@@ -265,7 +265,7 @@ uint8_t W5100Class::isW5500(void)
 	//Serial.print("version=");
 	//Serial.println(ver);
 	if (ver != 4) return 0;
-	//Serial.println("chip is W5500");
+	// Serial.println("chip is W5500");
 	return 1;
 }
 
