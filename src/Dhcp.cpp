@@ -5,6 +5,7 @@
 #include "Ethernet.h"
 #include "Dhcp.h"
 #include "utility/w5100.h"
+#include <esp_task_wdt.h>
 
 int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
 {
@@ -102,6 +103,9 @@ int DhcpClass::request_DHCP_lease()
 
 		if (result != 1 && ((millis() - startTime) > _timeout))
 			break;
+
+		esp_task_wdt_reset();
+		delay(1);
 	}
 
 	// We're done with the socket now
