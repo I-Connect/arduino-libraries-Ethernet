@@ -1,4 +1,4 @@
-:repository-owner: arduino-libraries
+:repository-owner: I-Connect
 :repository-name: Ethernet
 
 = {repository-name} Library for Arduino =
