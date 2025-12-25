@@ -47,8 +47,13 @@
 // does not always seem to work in practice (maybe WIZnet bugs?)
 //#define ETHERNET_LARGE_BUFFERS
 
+<<<<<<< HEAD
 #include <Arduino.h>
 
+=======
+
+#include <Arduino.h>
+>>>>>>> upstream/master
 #include "Client.h"
 #include "Server.h"
 #include "Udp.h"
@@ -80,7 +85,10 @@ public:
 	// gain the rest of the configuration through DHCP.
 	// Returns 0 if the DHCP configuration failed, and 1 if it succeeded
 	static int begin(uint8_t *mac, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
+<<<<<<< HEAD
 	static int begin(uint8_t *mac, const char* hostName, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
+=======
+>>>>>>> upstream/master
 	static int maintain();
 	static EthernetLinkStatus linkStatus();
 	static EthernetHardwareStatus hardwareStatus();
@@ -106,17 +114,29 @@ public:
 	void setRetransmissionTimeout(uint16_t milliseconds);
 	void setRetransmissionCount(uint8_t num);
 
+<<<<<<< HEAD
 	// Opens a socket(TCP or UDP or IP_RAW mode)
 	static uint8_t socketBegin(uint8_t protocol, uint16_t port);
 	// Close socket
 	static void socketClose(uint8_t s);
 
+=======
+>>>>>>> upstream/master
 	friend class EthernetClient;
 	friend class EthernetServer;
 	friend class EthernetUDP;
 private:
+<<<<<<< HEAD
 	static uint8_t socketBeginMulticast(uint8_t protocol, IPAddress ip,uint16_t port);
 	static uint8_t socketStatus(uint8_t s);
+=======
+	// Opens a socket(TCP or UDP or IP_RAW mode)
+	static uint8_t socketBegin(uint8_t protocol, uint16_t port);
+	static uint8_t socketBeginMulticast(uint8_t protocol, IPAddress ip,uint16_t port);
+	static uint8_t socketStatus(uint8_t s);
+	// Close socket
+	static void socketClose(uint8_t s);
+>>>>>>> upstream/master
 	// Establish TCP connection (Active connection)
 	static void socketConnect(uint8_t s, uint8_t * addr, uint16_t port);
 	// disconnect the connection
@@ -305,7 +325,11 @@ private:
 	void presend_DHCP();
 	void send_DHCP_MESSAGE(uint8_t, uint16_t);
 	void printByte(char *, uint8_t);
+<<<<<<< HEAD
 	const char* _hostName;
+=======
+
+>>>>>>> upstream/master
 	uint8_t parseDHCPResponse(unsigned long responseTimeout, uint32_t& transactionId);
 public:
 	IPAddress getLocalIp();
@@ -315,7 +339,10 @@ public:
 	IPAddress getDnsServerIp();
 
 	int beginWithDHCP(uint8_t *, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
+<<<<<<< HEAD
 	int beginWithDHCP(uint8_t *, const char* hostName, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
+=======
+>>>>>>> upstream/master
 	int checkLease();
 };
 
