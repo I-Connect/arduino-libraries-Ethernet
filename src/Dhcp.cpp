@@ -5,7 +5,6 @@
 #include "Ethernet.h"
 #include "Dhcp.h"
 #include "utility/w5100.h"
-<<<<<<< HEAD
 #include <esp_task_wdt.h>
 
 int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
@@ -21,16 +20,6 @@ int DhcpClass::beginWithDHCP(uint8_t *mac, const char* hostName, unsigned long t
 	_timeout = timeout;
 	_responseTimeout = responseTimeout;
 	_hostName = hostName;
-=======
-
-int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
-{
-	_dhcpLeaseTime=0;
-	_dhcpT1=0;
-	_dhcpT2=0;
-	_timeout = timeout;
-	_responseTimeout = responseTimeout;
->>>>>>> upstream/master
 
 	// zero out _dhcpMacAddr
 	memset(_dhcpMacAddr, 0, 6);
@@ -120,12 +109,9 @@ int DhcpClass::request_DHCP_lease()
 
 		if (result != 1 && ((millis() - startTime) > _timeout))
 			break;
-<<<<<<< HEAD
 
 		esp_task_wdt_reset();
 		delay(1);
-=======
->>>>>>> upstream/master
 	}
 
 	// We're done with the socket now
@@ -142,11 +128,7 @@ void DhcpClass::presend_DHCP()
 
 void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
 {
-<<<<<<< HEAD
 	uint8_t buffer[18 + 63]; // Reserve 63 chars for the hostname.
-=======
-	uint8_t buffer[32];
->>>>>>> upstream/master
 	memset(buffer, 0, 32);
 	IPAddress dest_addr(255, 255, 255, 255); // Broadcast address
 
@@ -216,7 +198,6 @@ void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
 
 	// OPT - host name
 	buffer[16] = hostName;
-<<<<<<< HEAD
 
 	// if a hostname was given use it, use the default otherwise.
 	if (_hostName) {
@@ -236,17 +217,6 @@ void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
 		//put data in W5100 transmit buffer
 		_dhcpUdpSocket.write(buffer, 30);
 	}
-=======
-	buffer[17] = strlen(HOST_NAME) + 6; // length of hostname + last 3 bytes of mac address
-	strcpy((char*)&(buffer[18]), HOST_NAME);
-
-	printByte((char*)&(buffer[24]), _dhcpMacAddr[3]);
-	printByte((char*)&(buffer[26]), _dhcpMacAddr[4]);
-	printByte((char*)&(buffer[28]), _dhcpMacAddr[5]);
-
-	//put data in W5100 transmit buffer
-	_dhcpUdpSocket.write(buffer, 30);
->>>>>>> upstream/master
 
 	if (messageType == DHCP_REQUEST) {
 		buffer[0] = dhcpRequestedIPaddr;
