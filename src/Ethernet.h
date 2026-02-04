@@ -53,9 +53,9 @@
 #include "Udp.h"
 
 //DHCP failure statuses
-#define DHCP_RESPONSE_TIMEOUT	1
-#define DHCP_REQUEST_TIMEOUT	2
-#define DHCP_NO_SOCKET			  3
+#define DHCP_RESPONSE_TIMEOUT 1
+#define DHCP_REQUEST_TIMEOUT  2
+#define DHCP_NO_SOCKET        3
 #define DHCP_NAK_ERROR        4
 
 enum EthernetLinkStatus {
@@ -124,7 +124,7 @@ class EthernetClass {
     friend class EthernetServer;
     friend class EthernetUDP;
 
-    String getDhcpErrorString();
+    const char* getDhcpErrorString();
 
   private:
     static uint8_t socketBeginMulticast(uint8_t protocol, IPAddress ip, uint16_t port);
@@ -330,6 +330,7 @@ class DhcpClass {
     unsigned long _lastCheckLeaseMillis;
     uint8_t _dhcp_state;
     EthernetUDP _dhcpUdpSocket;
+    int dhcpError = 0;
 
     int request_DHCP_lease();
     void reset_DHCP_lease();
@@ -349,8 +350,7 @@ class DhcpClass {
     int beginWithDHCP(uint8_t*, const char* hostName, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
     int checkLease();
 
-    int dhcpError = 0;
-    int getDhcpError(){
+    int getDhcpError() const {
       return dhcpError;
     }
 
