@@ -40,6 +40,7 @@ void DhcpClass::reset_DHCP_lease()
 int DhcpClass::request_DHCP_lease()
 {
 	uint8_t messageType = 0;
+	dhcpError = 0;
 
 	// Pick an initial transaction ID
 	_dhcpTransactionId = random(1UL, 2000UL);
@@ -48,6 +49,7 @@ int DhcpClass::request_DHCP_lease()
 	_dhcpUdpSocket.stop();
 	if (_dhcpUdpSocket.begin(DHCP_CLIENT_PORT) == 0) {
 		// Couldn't get a socket
+		dhcpError = DHCP_NO_SOCKET;
 		return 0;
 	}
 
@@ -81,6 +83,7 @@ int DhcpClass::request_DHCP_lease()
 			messageType = parseDHCPResponse(_responseTimeout, respId);
 			if (messageType == DHCP_ACK) {
 				_dhcp_state = STATE_DHCP_LEASED;
+				dhcpError = 0;
 				result = 1;
 				//use default lease time if we didn't get it
 				if (_dhcpLeaseTime == 0) {
@@ -99,6 +102,7 @@ int DhcpClass::request_DHCP_lease()
 				_rebindInSec = _dhcpT2;
 			} else if (messageType == DHCP_NAK) {
 				_dhcp_state = STATE_DHCP_START;
+				dhcpError = DHCP_NAK_ERROR;
 			}
 		}
 
@@ -107,8 +111,11 @@ int DhcpClass::request_DHCP_lease()
 			_dhcp_state = STATE_DHCP_START;
 		}
 
-		if (result != 1 && ((millis() - startTime) > _timeout))
+		if (result != 1 && ((millis() - startTime) > _timeout)){
+			// Timeout
+			dhcpError = DHCP_REQUEST_TIMEOUT;
 			break;
+		}
 
 		esp_task_wdt_reset();
 		delay(1);
@@ -262,6 +269,8 @@ uint8_t DhcpClass::parseDHCPResponse(unsigned long responseTimeout, uint32_t& tr
 
 	while (_dhcpUdpSocket.parsePacket() <= 0) {
 		if ((millis() - startTime) > responseTimeout) {
+			// Timeout
+			dhcpError = DHCP_RESPONSE_TIMEOUT;
 			return 255;
 		}
 		delay(50);

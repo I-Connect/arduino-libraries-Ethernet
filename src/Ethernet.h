@@ -52,6 +52,12 @@
 #include "Server.h"
 #include "Udp.h"
 
+//DHCP failure statuses
+#define DHCP_RESPONSE_TIMEOUT	1
+#define DHCP_REQUEST_TIMEOUT	2
+#define DHCP_NO_SOCKET			  3
+#define DHCP_NAK_ERROR        4
+
 enum EthernetLinkStatus {
   Unknown,
   LinkON,
@@ -117,6 +123,9 @@ class EthernetClass {
     friend class EthernetClient;
     friend class EthernetServer;
     friend class EthernetUDP;
+
+    String getDhcpErrorString();
+
   private:
     static uint8_t socketBeginMulticast(uint8_t protocol, IPAddress ip, uint16_t port);
     static uint8_t socketStatus(uint8_t s);
@@ -294,7 +303,6 @@ class EthernetServer : public Server {
     static uint16_t server_port[MAX_SOCK_NUM];
 };
 
-
 class DhcpClass {
   private:
     uint32_t _dhcpInitialTransactionId;
@@ -340,10 +348,12 @@ class DhcpClass {
     int beginWithDHCP(uint8_t*, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
     int beginWithDHCP(uint8_t*, const char* hostName, unsigned long timeout = 60000, unsigned long responseTimeout = 4000);
     int checkLease();
+
+    int dhcpError = 0;
+    int getDhcpError(){
+      return dhcpError;
+    }
+
 };
-
-
-
-
 
 #endif

@@ -26,6 +26,23 @@
 IPAddress EthernetClass::_dnsServerAddress;
 DhcpClass* EthernetClass::_dhcp = NULL;
 
+String EthernetClass::getDhcpErrorString(){
+      switch(_dhcp->dhcpError){
+        case 0:
+          return "No Error";
+        case DHCP_RESPONSE_TIMEOUT:
+          return "DHCP Response Timeout";
+        case DHCP_REQUEST_TIMEOUT:
+          return "DHCP Request Timeout";
+        case DHCP_NO_SOCKET:
+          return "No Socket Available";
+		case DHCP_NAK_ERROR:
+		  return "DHCP NAK Received";
+		default:
+          return "Unknown Error";
+      }
+    }
+
 int EthernetClass::begin(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
 {
 	return begin(mac,
